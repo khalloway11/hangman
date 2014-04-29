@@ -16,13 +16,14 @@ $(document).ready(function(){
     var rightGuess = new Array(wordChoice.length);
     console.log(wordChoice);
     
+    $('#picture').html('<img src="0.png">');
     //initGuesses();
     
     for(var i = 0; i < wordChoice.length; i++){
         display = display.concat('*');
     }
     //console.log(display);
-    $('#word').text(display);
+    $('#word').html(display);
     
     $('#guess').click(function(){
         //console.log('click');
@@ -48,8 +49,9 @@ $(document).ready(function(){
                         if(!correct){
                             count++;
                         }
-                        $('.word').empty();
-                        $('#word').text(display);
+                        display.concat('<br>');
+                        console.log(display);
+                        $('#word').html(display);
                         var countStr = count + "";
                         var pichtml = "<img src ='";
                         pichtml += countStr;
