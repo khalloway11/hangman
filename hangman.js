@@ -6,29 +6,41 @@
 $(document).ready(function(){
     var words = ["potato", "toaster","bulldozer","demolition"];
     var count = 0;
-    var wrongGuess = new Array(10);
+    var madeGuesses = '';
     var guess = '';
     var wordChoice = Math.floor((Math.random() * 4));
     var display = '';
     var win = false;
     
     wordChoice = words[wordChoice];
-    var rightGuess = new Array(wordChoice.length);
     console.log(wordChoice);
-    
+	
+	var wordLetters = new Array(wordChoice.length);
+	for(var i = 0; i < wordChoice.length; i++){
+		wordLetters[i] = wordChoice.substring(i, (i+1));
+	}
+	
+	var wordDisplay = new Array(wordChoice.length);
+    for(var i = 0; i < wordChoice.length; i++){
+		wordDisplay[i] = '*';
+	}
+	
     $('#picture').html('<img src="0.png">');
-    //initGuesses();
     
     for(var i = 0; i < wordChoice.length; i++){
         display = display.concat('*');
     }
-    //console.log(display);
+    console.log(display);
     $('#word').html(display);
     
     $('#guess').click(function(){
         //console.log('click');
         //console.log('clock');
         //count++;
+        if(count === 10){
+            alert("You lose! Refresh to play again!");
+            return;
+        }
         var guess = $('#letter').val();
         var go = isNaN(guess);
         var correct = false;
@@ -36,35 +48,48 @@ $(document).ready(function(){
         if(go){
             if(guess.length > 0 && guess.length < 2){
                 if(isLetter(guess)){
-                    //var c = wordChoice.indexOf(guess);
-                        for(var i = 0; i < wordChoice.length; i++){
-                            if(wordChoice.charAt(i) === guess){
-                                display = display.concat(wordChoice.charAt(i));
-                                correct = true;
-                                
-                            } else{
-                                display = display.concat('*');                     
-                            }
-                        }
-                        if(!correct){
-                            count++;
-                        }
-                        display.concat('<br>');
-                        console.log(display);
-                        $('#word').html(display);
-                        var countStr = count + "";
-                        var pichtml = "<img src ='";
-                        pichtml += countStr;
-                        pichtml += ".png'></img>";
-                        console.log(pichtml);
-                        $('#picture').html(pichtml);
-                }
-            }
-        }
+                 	for(var i = 0; i < wordLetters.length; i++){
+						if(guess === wordLetters[i]){
+							wordDisplay[i] = wordLetters[i];
+							correct = true;
+						}
+					}
+					if(!correct){
+						count++;
+					}
+					madeGuesses = madeGuesses.concat(guess);
+                } else {
+					alert("input is not a letter");
+					return;
+				}
+            } else {
+				alert("input too long.");
+				return;
+			}
+        } else {
+			alert("Invalid input");
+			return;
+		}
+		
+		display = '';
+		for(var i = 0; i < wordDisplay.length; i++){
+			display = display.concat(wordDisplay[i]);
+		}
+		$('#word').text(display);
+		$('#guessed').text(madeGuesses);
+		var countStr = count + "";
+        var pichtml = "<img src ='";
+        pichtml += countStr;
+        pichtml += ".png'></img>";
+        console.log(pichtml);
+        $('#picture').html(pichtml);
     });
 });
 
-
+display.concat('<br>');
+                        console.log(display);
+                        $('#word').html(display);
+                        
                     
 function isLetter(str){
     return /[a-z]/i.test(str);
